@@ -1,5 +1,5 @@
-seqqueue:seqqueue.c
+stack_by2queue:stack_by2queue.c seqqueue.c
 	gcc -o $@ $^
 .PHONY:clean
 clean:
-	rm -f seqqueue
+	rm -f stack_by2queue
