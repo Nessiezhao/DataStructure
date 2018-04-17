@@ -2,8 +2,21 @@
 
 #include<stddef.h>
 
+//typedef char SeqStackType;
+
+#define FOR_MAZE
+#ifdef FOR_MAZE
+
+typedef struct Point
+{
+    int row;
+    int col;
+}Point;
+typedef Point SeqStackType;
+#else
 typedef char SeqStackType;
 
+#endif
 typedef struct SeqStack
 {
     SeqStackType* data;

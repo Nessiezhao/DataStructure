@@ -1,5 +1,5 @@
-seqstack:seqstack.c
-	gcc -o $@ $^
+maze:maze.c seqstack.c
+	gcc -o $@ $^ -g
 .PHONY:clean
 clean:
-	rm -f seqstack
+	rm -f seqstack maze

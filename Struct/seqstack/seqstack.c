@@ -93,7 +93,7 @@ int SeqStackTop(SeqStack* stack,SeqStackType* value)
 ///////////////////////////////////////////////////////////////
 //以下为测试代码
 ///////////////////////////////////////////////////////////////
-#if 1
+#if 0
 #include<stdio.h>
 #define TEST_HEADER printf("\n==============================%s====================================\n",__FUNCTION__);
 void SeqStackPrintChar(SeqStack* stack,const char* msg)
