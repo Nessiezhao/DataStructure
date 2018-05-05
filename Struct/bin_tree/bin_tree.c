@@ -269,7 +269,6 @@ TreeNode* TreeParent(TreeNode* root,TreeNode* child)
 ////////////////////////////////////////////////////////////////////////
 //以下为笔试面试常见题
 //////////////////////////////////////////////////////////////////////
-#if 0
 void TreePreOrderByLoop(TreeNode* root)
 {
     if(root == NULL)
@@ -428,7 +427,6 @@ void TreeMirrorByLoop(TreeNode* root)
     }
     return;
 }
-#endif
 int IsCompleteTree(TreeNode* root)
 {
     if(root == NULL)
@@ -475,7 +473,7 @@ int IsCompleteTree(TreeNode* root)
             //阶段二分支
             if(cur->lchild == NULL && cur->rchild == NULL)
             {
-                ;
+              break;
             }
             else
             {
@@ -687,7 +685,6 @@ void TestParent()
     printf("node: expected is %p,actual %p\n",root->lchild,node);
 
 }
-#if 0
 void TestPreOrderByLoop()
 {
     TEST_HEADER;
@@ -739,7 +736,6 @@ void TestMirrorByLoop()
     printf("\n层序遍历：");
     TreeLevelOrder(root);
 }
-#endif
 void TestIsComplete()
 {
     TEST_HEADER;
@@ -747,6 +743,10 @@ void TestIsComplete()
     TreeNode* root = TreeCreate(data,sizeof(data)/sizeof(data[0])-1,'#');
     int ret = IsCompleteTree(root);
     printf("ret expected : 0,actual %d\n",ret);
+    TreeNodeType data1[] = "ab##c##";
+    TreeNode* root1 = TreeCreate(data1,sizeof(data1)/sizeof(data1[0])-1,'#');
+    int ret1 = IsCompleteTree(root1);
+    printf("ret1 expected : 1,actual %d\n",ret1);
 }
 int main()
 {
@@ -765,11 +765,11 @@ int main()
     TestHeight();
     TestNodeFind();
     TestParent();
- //   TestPreOrderByLoop();
- //   TestInOrderByLoop();
- //   TestPostOrderByLoop();
- //   TestMirror();
- //   TestMirrorByLoop();
+    TestPreOrderByLoop();
+    TestInOrderByLoop();
+    TestPostOrderByLoop();
+    TestMirror();
+    TestMirrorByLoop();
     TestIsComplete();
     return 0;
 }
