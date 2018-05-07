@@ -332,7 +332,7 @@ void TreeInOrderByLoop(TreeNode* root)
         printf("%c ",top->data);
         SeqStackPop(&stack);
         //让cur指向栈顶元素的右子树，重复刚才循环判空的过程
-        cur = cur->rchild;
+        cur = top->rchild;
     }
     printf("\n");
     return;

@@ -4,14 +4,7 @@
 #include <stdlib.h>
 //#define FOR_MAZE
 #define FOR_TREE
-#ifdef FOR_MAZE
-typedef struct Point
-{
-    int row;
-    int col;
-}Point;
-typedef Point SeqStackType;
-#else
+
 
 #ifdef FOR_TREE
 struct TreeNode;
@@ -19,10 +12,10 @@ typedef struct TreeNode* SeqStackType;
 #else
 typedef char SeqStackType;
 #endif
-#endif
+
 typedef struct SeqStack
 {
-    TreeNode* data;
+    SeqStackType* data;
     size_t size;
     size_t capacity;//max_size 的代替品，data这段内存中能容纳的元素个数
 }SeqStack;
