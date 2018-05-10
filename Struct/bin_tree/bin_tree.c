@@ -4,6 +4,7 @@
 #include"seqstack.h"
 #include<stdlib.h>
 #include<stddef.h>
+#include<assert.h>
 
 TreeNode* CreateTreeNode(TreeNodeType value)
 {
@@ -484,6 +485,60 @@ int IsCompleteTree(TreeNode* root)
     //所有节点都遍历完了，此时是完全二叉树
     return 1;
 }
+//告诉先序和中序的遍历结果创建树
+size_t Find(TreeNodeType array[],size_t left,size_t right,TreeNodeType to_find)
+{
+    size_t i = left;
+    for(;i < right ;++i)
+    {
+        if(array[i] == to_find)
+        {
+            return i;
+        }
+    }
+    return 0;
+}
+TreeNode* _TreeRebuild(TreeNodeType pre_order[],size_t pre_order_size,size_t* pre_order_index,\
+                       TreeNodeType in_order[],size_t in_order_left,size_t in_order_right)
+{
+    if(in_order_right >= in_order_left)
+    {
+        //无效区间内，当前子树的中序遍历结果就是空的，此时说明这棵子树就是空树
+        return NULL;
+    }
+    if(pre_order_index == NULL )
+    {
+        //非法输入
+        return NULL;
+    }
+    if(*pre_order_index >= pre_order_size)
+    {
+        //遍历完了
+        return NULL;
+    }
+    //根据先序遍历结果取出当前值，基于这个值构建一个节点
+    //new_node相当于前子树的根节点
+    TreeNode* new_node = CreateTreeNode(pre_order[*pre_order_index]);
+    //查找一下当前节点在中序序列的位置
+    size_t cur_root_in_order_index = Find(in_order,in_order_left,in_order_right,new_node->data);
+    assert(cur_root_in_order_index != (size_t)-1);
+    ++(*pre_order_index);
+    //左子树区间[in_order_left,cur_root_in_order_index)
+    new_node->lchild = _TreeRebuild(pre_order,pre_order_size,pre_order_index,\
+                                    in_order,in_order_left,cur_root_in_order_index);
+    //右子树区间[cur_root_in_order_index+1，in_order_right)
+    new_node->rchild = _TreeRebuild(pre_order,pre_order_size,pre_order_index,\
+                                    in_order,cur_root_in_order_index+1,in_order_right);
+    return new_node;
+}
+TreeNode* TreeRebuild(TreeNodeType pre_order[],TreeNodeType in_order[],size_t size)
+{
+    size_t pre_order_index = 0;
+    //[in_order_left,in_order_right)
+    size_t in_order_left = 0;
+    size_t in_order_right = size;
+    return _TreeRebuild(pre_order,size,&pre_order_index,in_order,in_order_left,in_order_right);
+}
 ////////////////////////////////////////////////////////////////////////
 //以下为测试代码
 //////////////////////////////////////////////////////////////////////
@@ -748,6 +803,22 @@ void TestIsComplete()
     int ret1 = IsCompleteTree(root1);
     printf("ret1 expected : 1,actual %d\n",ret1);
 }
+void TestRebuild()
+{
+    TEST_HEADER;
+    TreeNodeType pre_order[] = "acfbegd";
+    TreeNodeType in_order[] = "fcaegbd";
+    TreeNode* root =  TreeRebuild(pre_order,in_order,sizeof(pre_order)/sizeof(pre_order[0])-1);
+    printf("\n先序遍历：");
+    TreePreOrder(root);
+    printf("\n中序遍历：");
+    TreeInOrder(root);
+    printf("\n后序遍历：");
+    TreePostOrder(root);
+    printf("\n层序遍历：");
+    TreeLevelOrder(root);
+    printf("\n");
+}
 int main()
 {
     TestInit();
@@ -771,6 +842,7 @@ int main()
     TestMirror();
     TestMirrorByLoop();
     TestIsComplete();
+    TestRebuild();
     return 0;
 }
 #endif
