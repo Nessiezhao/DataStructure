@@ -501,7 +501,7 @@ size_t Find(TreeNodeType array[],size_t left,size_t right,TreeNodeType to_find)
 TreeNode* _TreeRebuild(TreeNodeType pre_order[],size_t pre_order_size,size_t* pre_order_index,\
                        TreeNodeType in_order[],size_t in_order_left,size_t in_order_right)
 {
-    if(in_order_right >= in_order_left)
+    if(in_order_left >= in_order_right)
     {
         //无效区间内，当前子树的中序遍历结果就是空的，此时说明这棵子树就是空树
         return NULL;
