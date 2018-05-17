@@ -21,3 +21,5 @@ void HeapInit(Heap* heap,Compare cmp);
 void HeapDestroy(Heap* heap);
 
 void HeapInsert(Heap* heap,HeapType value);
+
+int HeapRoot(Heap* heap,HeapType* value);
