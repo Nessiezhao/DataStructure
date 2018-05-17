@@ -23,3 +23,5 @@ void HeapDestroy(Heap* heap);
 void HeapInsert(Heap* heap,HeapType value);
 
 int HeapRoot(Heap* heap,HeapType* value);
+
+void HeapErase(Heap* heap);
