@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include<string.h>
 #include"heap.h"
 
 int Less(HeapType a,HeapType b)
@@ -83,6 +84,72 @@ int HeapRoot(Heap* heap,HeapType* value)
     *value = heap->data[0];
     return 1;
 }
+void AdjustDown(Heap* heap,size_t index)
+{
+    if(heap == NULL)
+    {
+        return;
+    }
+    if(heap->size == 0)
+    {
+        return;
+    }
+    size_t parent = index;
+    size_t child = 2 * index + 1;
+    while(child < heap->size)
+    {
+        if(child+1 < heap->size && heap->cmp(heap->data[child+1],heap->data[child]))
+        {
+            child = child + 1;
+        }
+        if(heap->cmp(heap->data[child],heap->data[parent]))
+        {
+            Swap(&heap->data[parent],&heap->data[child]);
+        }
+        parent = child;
+        child = 2 * parent + 1;
+    }
+}
+void HeapErase(Heap* heap)
+{
+    if(heap == NULL)
+    {
+        return;
+    }
+    if(heap->size == 0)
+    {
+        return;
+    }
+    Swap(&heap->data[0],&heap->data[heap->size -1]);
+    --heap->size;
+    AdjustDown(heap,0);
+    return;
+}
+void HeapCreate(Heap* heap,HeapType array[],size_t size)
+{
+    if(heap == NULL)
+    {
+        return;
+    }
+    size_t i = 0;
+    for(;i < size;++i)
+    {
+        HeapInsert(heap,array[i]);
+    }
+    return;
+}
+void HeapSort(HeapType array[],size_t size)
+{
+    Heap heap;
+    HeapInit(&heap,Greater);
+    HeapCreate(&heap,array,size);
+    while(heap.size > 0)
+    {
+        HeapErase(&heap);
+    }
+    memcpy(array,heap.data,size * sizeof(HeapType));
+    return;
+}
 ///////////////////////////////////////////////////////////////
 //以下为测试代码
 ///////////////////////////////////////////////////////////////
@@ -143,12 +210,50 @@ void TestRoot()
     printf("ret expected 1,actual %d\n",ret);
     printf("value expected f,actual %c\n",value);
 }
+void TestErase()
+{
+    TEST_HEADER;
+    Heap heap;
+    HeapInit(&heap,Greater);
+    HeapInsert(&heap,'c');
+    HeapInsert(&heap,'b');
+    HeapInsert(&heap,'a');
+    HeapInsert(&heap,'e');
+    HeapInsert(&heap,'f');
+    HeapInsert(&heap,'d');
+    HeapErase(&heap);
+    HeapPrintChar(&heap,"删除堆顶元素");
+}
+void TestCreate()
+{
+    TEST_HEADER;
+    Heap heap;
+    HeapInit(&heap,Greater);
+    HeapType array[] = {'d','e','c','a','b'};
+    HeapCreate(&heap,array,sizeof(array)/sizeof(array[0]));
+    HeapPrintChar(&heap,"创建一个堆");
+}
+void TestSort()
+{
+    TEST_HEADER;
+    HeapType array[] = {'d','e','c','a','b'};
+    HeapSort(array,sizeof(array)/sizeof(array[0]));
+    size_t i = 0;
+    for(;i < sizeof(array);++i)
+    {
+        printf("[%c] ",array[i]);
+    }
+    printf("\n");
+}
 int main()
 {
     TestInit();
     TestDestroy();
     TestInsert();
     TestRoot();
+    TestErase();
+    TestCreate();
+    TestSort();
     return 0;
 }
 #endif
