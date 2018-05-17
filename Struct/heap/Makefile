@@ -1,5 +1,5 @@
 heap:heap.c
-	gcc -o $@ $^
+	gcc -o $@ $^ -g
 .PHONY:clean
 clean:
 	rm -f heap
