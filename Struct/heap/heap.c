@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include<string.h>
 #include"heap.h"
-
+//为小堆打造的比较函数
 int Less(HeapType a,HeapType b)
 {
     return a < b ? 1 : 0;
 }
-
+//为大堆打造的比较函数
 int Greater(HeapType a,HeapType b)
 {
     return a > b ? 1 : 0;
@@ -15,6 +15,7 @@ void HeapInit(Heap* heap,Compare cmp)
 {
     if(heap == NULL)
     {
+        //非法输入
         return;
     }
     heap->size = 0;
@@ -25,6 +26,7 @@ void HeapDestroy(Heap* heap)
 {
     if(heap == NULL)
     {
+        //非法输入
         return;
     }
     heap->size = 0;
@@ -44,6 +46,7 @@ void AdjustUp(Heap* heap,size_t index)
     {
         return;
     }
+    //一个变量只做一件事
     size_t child = index;
     size_t parent = (child -1)/2;
     while(child > 0)
@@ -54,6 +57,9 @@ void AdjustUp(Heap* heap,size_t index)
         }
         else
         {
+            //如果发现某个位置下，child 和 parent 已经满足堆的要求
+            //此时就可以停止上浮
+            //因为更上面的节点一定也是满足堆的要求的
             break;
         }
         child = parent;
@@ -65,13 +71,17 @@ void HeapInsert(Heap* heap,HeapType value)
 {
     if(heap == NULL)
     {
+        //非法输入
         return;
     }
     if(heap->size >= HeapMaxSize)
     {
+        //堆已经满了，无法再插入
         return;
     }
     heap->data[heap->size++] = value;
+    //对这个堆进行上浮调整
+    //调整的起始位置是size-1
     AdjustUp(heap,heap->size - 1);
     return;
 }
@@ -79,6 +89,12 @@ int HeapRoot(Heap* heap,HeapType* value)
 {
     if(heap == NULL || value == NULL)
     {
+        //非法输入
+        return 0;
+    }
+    if(heap->size == 0)
+    {
+        //空堆
         return 0;
     }
     *value = heap->data[0];
@@ -100,8 +116,12 @@ void AdjustDown(Heap* heap,size_t index)
     {
         if(child+1 < heap->size && heap->cmp(heap->data[child+1],heap->data[child]))
         {
+            //如果右子树存在，并且右子树比左子树更符合堆的要求
+            //假设我们这是个小堆，就要求说
+            //如果右子树比左子树小，那么就让child指向右子树
             child = child + 1;
         }
+        //child 就指向了左右子树中更小的那个元素
         if(heap->cmp(heap->data[child],heap->data[parent]))
         {
             Swap(&heap->data[parent],&heap->data[child]);
@@ -114,14 +134,19 @@ void HeapErase(Heap* heap)
 {
     if(heap == NULL)
     {
+        //非法输入
         return;
     }
     if(heap->size == 0)
     {
+        //空堆
         return;
     }
+    //交换堆顶元素和最后一个元素
     Swap(&heap->data[0],&heap->data[heap->size -1]);
+    //进行尾删
     --heap->size;
+    //从根节点出发，进行下沉调整
     AdjustDown(heap,0);
     return;
 }
@@ -131,6 +156,7 @@ void HeapCreate(Heap* heap,HeapType array[],size_t size)
     {
         return;
     }
+    //遍历array 数组，把数组的元素依次的插入到堆中
     size_t i = 0;
     for(;i < size;++i)
     {
@@ -138,15 +164,20 @@ void HeapCreate(Heap* heap,HeapType array[],size_t size)
     }
     return;
 }
+//如果要进行升序排序，那就要构建一个大堆
+//如果要进行降序排序，那就要构建一个小堆
 void HeapSort(HeapType array[],size_t size)
 {
+    //把这个数组构建成一个堆
     Heap heap;
     HeapInit(&heap,Greater);
     HeapCreate(&heap,array,size);
+    //循环的堆进行删除操作
     while(heap.size > 0)
     {
         HeapErase(&heap);
     }
+    //循环结束后，堆排序就完成了
     memcpy(array,heap.data,size * sizeof(HeapType));
     return;
 }
