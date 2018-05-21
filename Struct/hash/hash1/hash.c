@@ -74,24 +74,31 @@ int HashFind(HashTable* ht,KeyType key,ValType* value)
 {
     if(ht == NULL)
     {
+        //非法输入
         return 0;
     }
     if(ht->size == 0)
     {
+        //空的hash表
         return 0;
     }
+    //根据key算出offset
     size_t offset = ht->func(key);
+    //从offset开始往后进行查找，每次取到一个元素，和key进行比较
     while(1)
     {
+        //如果找到key相同的元素，查找成功，并把value返回
         if(ht->data[offset].key == key && ht->data[offset].stat == Valid)
         {
             *value = ht->data[offset].value;
             return 1;
         }
+        //如果是一个空位置，则查找失败
         else if(ht->data[offset].stat == Empty)
         {
             return 0;
         }
+        //如果此时key不相等，就继续向后查找
         else
         {
             ++offset;
@@ -100,7 +107,44 @@ int HashFind(HashTable* ht,KeyType key,ValType* value)
     }
     return 0;
 }
-
+void HashRemove(HashTable* ht,KeyType key)
+{
+    if(ht == NULL)
+    {
+        //非法输入
+        return;
+    }
+    if(ht->size == 0)
+    {
+        //空的hash表
+        return;
+    }
+    //根据key计算offset
+    size_t offset = ht->func(key);
+    //从offset开始判定当前元素的key和要删除的key是否相等
+    while(1)
+    {
+        if(ht->data[offset].key == key && ht->data[offset].stat == Valid)
+        {
+            //如果相等的话就把它标记为Deleted
+            ht->data[offset].stat = Deleted;
+            --ht->size;
+            return;
+        }
+        else if(ht->data[offset].stat == Empty)
+        {
+            //如果当前的状态为空，那就在hash表中没找到，删除失败
+            return;
+        }
+        else
+        {
+            //线性探测查找下一个元素
+            ++offset;
+            offset = offset > HashMaxSize ? 0 : offset;
+        }
+    }
+    return;
+}
 ///////////////////////////////////////////////////
 //以下为测试代码
 //////////////////////////////////////////////////
@@ -164,12 +208,32 @@ void TestFind()
     printf("ret expected 1,actual %d\n",ret);
     printf("value expected 12,actual %d\n",value);
 }
+void TestRemove()
+{
+    TEST_HEADER;
+    HashTable ht;
+    HashInit(&ht,HashFuncDefault);
+    HashInsert(&ht,1,1);
+    HashInsert(&ht,1,10);
+    HashInsert(&ht,2,2);
+    HashInsert(&ht,1001,11);
+    HashInsert(&ht,1002,12);
+    ValType value;
+    int ret = HashFind(&ht,1002,&value);
+    printf("ret expected 1,actual %d\n",ret);
+    printf("value expected 12,actual %d\n",value);
+
+    HashRemove(&ht,1002);
+    ret = HashFind(&ht,1002,&value);
+    printf("ret expected 0,actual %d\n",ret);
+}
 int main()
 {
     TestInit();
     TestDestroy();
     TestInsert();
     TestFind();
+    TestRemove();
     return 0;
 }
 #endif
