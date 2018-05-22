@@ -1,5 +1,5 @@
-heap:heap.c
+hash:hash.c
 	gcc -o $@ $^
 .PHONY:clean
 clean:
-	rm -f heap
+	rm -f hash
