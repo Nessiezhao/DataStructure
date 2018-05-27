@@ -96,6 +96,7 @@ void InsertSort(int array[],size_t size)
     }
     return;
 }
+//堆排序
 //方法一：
 //把新元素放到数组的末尾，进行上浮式的调整（从前往后遍历）
 //方法二：
@@ -134,7 +135,7 @@ void HeapCreate(int array[],size_t size)
     AdjustDown(array,size,0);
     return;
 }
-void HeapPop(int array,size_t heap_size)
+void HeapPop(int array[],size_t heap_size)
 {
     if(heap_size <= 1)
     {
@@ -163,7 +164,85 @@ void HeapSort(int array[],size_t size)
     }
     return;
 }
+//希尔排序
+void ShellSort(int array[],int64_t size)
+{
+    if(size <= 1)
+    {
+        return;
+    }
+    //此时我们使用希尔排序
+    int64_t gap = size / 2;
+    //第一重循环，生成步长序列
+    for(;gap > 0;gap /= 2)
+    {
+        //第二重循环，进行插入排序
+        //此循环执行的顺序，相当于
+        //先处理第一组的第一个数据
+        //再处理第二组的第一个数据
+        //再处理第三组的第一个数据
+        //...
+        //再处理第一组的第二个数据
+        int64_t i = gap;//此处相当于插入排序中的 i = 1
+        for(;i < size;++i)
+        {
+            //此时i_value 就是待插入元素
+            int i_value = array[i];
+            //第三重循环，线性表的查找和搬运
+            int64_t cur = i;
+            //此处 cur -= gap 就是在找同组元素中的上一个元素
+            for(;cur >= gap; cur -= gap)
+            {
+                if(array[cur-gap] > i_value)
+                {
+                    //此时进行搬运
+                    array[cur] = array[cur-gap];
+                }
+                else
+                {
+                    //找到了
+                    break;
+                }
+            }
+            array[cur] = i_value;
+        }
+    }
+    return;
+}
 int main()
 {
+    int array[] = {5,3,6,7,8,2,1,9};
+    int i = 0;
+    int size = sizeof(array)/sizeof(array[0]);
+    ShellSort(array,sizeof(array)/sizeof(array[0]));
+    for(i = 0;i <size;i++)
+    {
+        printf("%d  ",array[i]);
+    }
+    printf("\n");
+    HeapSort(array,sizeof(array)/sizeof(array[0]));
+    for(i = 0;i <size;i++)
+    {
+        printf("%d  ",array[i]);
+    }
+    printf("\n");
+    InsertSort(array,sizeof(array)/sizeof(array[0]));
+    for(i = 0;i <size;i++)
+    {
+        printf("%d  ",array[i]);
+    }
+    printf("\n");
+    BubbleSort(array,sizeof(array)/sizeof(array[0]));
+    for(i = 0;i <size;i++)
+    {
+        printf("%d  ",array[i]);
+    }
+    printf("\n");
+    SelectSort(array,sizeof(array)/sizeof(array[0]));
+    for(i = 0;i <size;i++)
+    {
+        printf("%d  ",array[i]);
+    }
+    printf("\n");
     return 0;
 }
