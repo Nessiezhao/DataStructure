@@ -16,4 +16,4 @@ void BloomFilterDestroy(BloomFilter* bf);
 
 void BloomFilterInsert(BloomFilter* bf,const char* str);
 
-void BloomFilterIsExist(BloomFilter* bf,const char* str);
+int BloomFilterIsExist(BloomFilter* bf,const char* str);

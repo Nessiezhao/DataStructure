@@ -4,7 +4,8 @@
 size_t BKDRHash(const char* str)
 {
     size_t hash = 0;
-    while(size_t ch = (size_t)*str++)
+    size_t ch = 0;
+    while(ch = (size_t)*str++)
     {
         hash = hash * 131 +ch;
     }
@@ -14,7 +15,8 @@ size_t BKDRHash(const char* str)
 size_t SDBMHash(const char* str)
 {
     size_t hash = 0;
-    while(size_t ch = (size_t)*str++)
+    size_t ch = 0;
+    while(ch = (size_t)*str++)
     {
         hash = hash * 65599 +ch;
     }

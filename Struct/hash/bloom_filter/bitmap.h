@@ -2,7 +2,7 @@
 #include<stdint.h>
 
 typedef uint64_t BitmapType;
-
+#define BitmapMaxSize 1000
 typedef struct Bitmap
 {
     uint64_t* data;
