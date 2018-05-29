@@ -241,10 +241,11 @@ int main()
         printf("%d  ",array3[i]);
     }
     printf("\n");
-    SelectSort(array,sizeof(array)/sizeof(array[0]));
+    int array4[] = {5,3,6,7,8,2,1,9};
+    SelectSort(array4,sizeof(array4)/sizeof(array4[0]));
     for(i = 0;i <size;i++)
     {
-        printf("%d  ",array[i]);
+        printf("%d  ",array4[i]);
     }
     printf("\n");
     return 0;
