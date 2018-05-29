@@ -209,6 +209,30 @@ void ShellSort(int array[],int64_t size)
     }
     return;
 }
+//归并排序
+void _MergeSort(int array[],int64_t beg,int64_t end,int* tmp )
+{
+    if(end - beg <= 1)
+    {
+        //要么没元素，要么一个元素，要么是非法区间
+        return;
+    }
+    int64_t mid = beg + (end - beg) / 2;
+    //此时有了两个区间
+    //[beg,mid)
+    //[mid,end) 
+    _MergeSort(array,beg,mid,tmp);
+    _MergeSort(array,mid,end,tmp);
+    _MergeArray(array,beg,mid,end,tmp);
+}
+void MergeSort(int array[],size_t size)
+{
+    //此时我们创建一个临时空间用来合并元素
+    int* tmp = (int*)malloc(sizeof(int) * size);
+    _MergeSort(array,0,size,tmp);
+    free(tmp);
+    return;
+}
 int main()
 {
     int array[] = {5,3,6,7,8,2,1,9};
