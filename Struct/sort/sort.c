@@ -210,6 +210,33 @@ void ShellSort(int array[],int64_t size)
     return;
 }
 //归并排序
+void _MergeArray(int array[],int64_t beg,int64_t mid,int64_t end,int* tmp)
+{
+    int64_t cur1 = beg;
+    int64_t cur2 = mid;
+    int64_t tmp_index = beg;
+    while(cur1 < mid && cur2 < end)
+    {
+        if(array[cur1] < array[cur2])
+        {
+            tmp[tmp_index++] = array[cur1++];
+        }
+        else 
+        {
+            tmp[tmp_index++] = array[cur2++];
+        }
+    }
+    while(cur1 < mid)
+    {
+        tmp[tmp_index++] = array[cur1++];
+    }
+    while(cur2 < end)
+    {
+        tmp[tmp_index++] = array[cur2++];
+    }
+    memcpy(array+beg,tmp+beg,sizeof(int) * (end - beg));
+    return;
+}
 void _MergeSort(int array[],int64_t beg,int64_t end,int* tmp )
 {
     if(end - beg <= 1)
@@ -270,6 +297,13 @@ int main()
     for(i = 0;i <size;i++)
     {
         printf("%d  ",array4[i]);
+    }
+    printf("\n");
+    int array5[] = {5,4,6,7,8,2,1,9};
+    MergeSort(array5,sizeof(array5)/sizeof(array[0]));
+    for(i = 0;i < size;++i)
+    {
+        printf("%d  ",array5[i]);
     }
     printf("\n");
     return 0;
