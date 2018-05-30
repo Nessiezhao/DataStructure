@@ -271,7 +271,7 @@ int main()
         printf("%d  ",array[i]);
     }
     printf("\n");
-    int array1[] = {5,3,6,7,8,2,1,9};
+    int array1[] = {5,4,6,7,8,2,1,9};
     HeapSort(array1,sizeof(array1)/sizeof(array1[0]));
     for(i = 0;i <size;i++)
     {
