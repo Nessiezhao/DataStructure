@@ -262,7 +262,7 @@ void MergeSort(int array[],size_t size)
 }
 int main()
 {
-    int array[] = {5,3,6,7,8,2,1,9};
+    int array[] = {5,4,6,7,8,2,1,9};
     int i = 0;
     int size = sizeof(array)/sizeof(array[0]);
     ShellSort(array,sizeof(array)/sizeof(array[0]));
