@@ -260,6 +260,7 @@ void MergeSort(int array[],size_t size)
     free(tmp);
     return;
 }
+//快速排序
 int main()
 {
     int array[] = {5,4,6,7,8,2,1,9};
