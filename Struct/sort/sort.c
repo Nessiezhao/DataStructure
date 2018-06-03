@@ -260,6 +260,36 @@ void MergeSort(int array[],size_t size)
     free(tmp);
     return;
 }
+//归并排序（非递归版本）
+void MergeSortByLoop(int array[],size_t size)
+{
+    if(size <= 1)
+    {
+        return;
+    }
+    int* tmp = (int*)malloc(sizeof(int) * size);
+    size_t gap = 1;
+    for(;gap < size;gap *= 2)
+    {
+        size_t i = 0;
+        for(;i < size ;i += 2*gap)
+        {
+            size_t beg = i;
+            size_t mid = i + gap;
+            if(mid > size)
+            {
+                mid = size;
+            }
+            size_t end = i + 2 * gap;
+            if(end > size)
+            {
+                end = size;
+            }
+            _MergeArray(array,beg,mid,end,tmp);
+        }
+    }
+    free(tmp);
+}
 //快速排序
 int main()
 {
