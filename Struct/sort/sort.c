@@ -268,13 +268,17 @@ void MergeSortByLoop(int array[],size_t size)
         return;
     }
     int* tmp = (int*)malloc(sizeof(int) * size);
+    //定义一个步长，初始为1，相当于每次合并两个长度为gap的有效区间
     size_t gap = 1;
     for(;gap < size;gap *= 2)
     {
+        //在当前的gap下，使用i辅助我们完成所有长度为gap的区间的合并
         size_t i = 0;
         for(;i < size ;i += 2*gap)
         {
+            //[beg,mid),[mid,end)
             size_t beg = i;
+            //为了防止mid超出数组的最大范围
             size_t mid = i + gap;
             if(mid > size)
             {
@@ -331,7 +335,14 @@ int main()
     }
     printf("\n");
     int array5[] = {5,4,6,7,8,2,1,9};
-    MergeSort(array5,sizeof(array5)/sizeof(array[0]));
+    MergeSort(array5,sizeof(array5)/sizeof(array5[0]));
+    for(i = 0;i < size;++i)
+    {
+        printf("%d  ",array5[i]);
+    }
+    printf("\n");
+    int array6[] = {5,4,6,7,8,2,1,9};
+    MergeSortByLoop(array6,sizeof(array6)/sizeof(array6[0]));
     for(i = 0;i < size;++i)
     {
         printf("%d  ",array5[i]);
