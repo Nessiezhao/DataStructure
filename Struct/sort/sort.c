@@ -304,22 +304,27 @@ int64_t Partion(int array[],int64_t beg,int64_t end)
     }
     int64_t left = beg;
     int64_t right = end - 1;
-    int key = array[end-1];
+    //取数组最后一个值作为基准值
+    int key = array[right];
     while(left < right)
     {
         while(left < right && array[left] <= key)
         {
+            //从左往右找到一个大于key的值
             ++left;
         }
         while(left < right && array[right] >= key)
         {
+            //从右往左找到一个小于key的值
             --right;
         }
         if(left < right )
         {
+            //将找到的两个值进行交换，然后进行下一次寻找
             Swap(&array[left],&array[right]);
         }
     }
+    //最后将left指向的值和基准值进行交换
     Swap(&array[left],&array[end - 1]);
     return left;
 }
