@@ -330,6 +330,37 @@ int64_t Partion(int array[],int64_t beg,int64_t end)
 }
 
 //2.挖坑法
+int64_t Partion2(int array[],int64_t beg,int64_t end)
+{
+    if(end - beg <= 1)
+    {
+        return beg;
+    }
+    int64_t left = beg;
+    int64_t right = end - 1;
+    int key = array[right];
+    while(left < right)
+    {
+        while(left < right && array[left] <= key)
+        {
+            ++left;
+        }
+        if(left < right)
+        {
+            array[right--] = array[left];
+        }
+        while(left < right && array[right] >= key)
+        {
+            --right;
+        }
+        if(left < right)
+        {
+            array[left++] = array[right];
+        }
+    }
+    array[left] = key;
+    return left;
+}
 void _QuickSort(int array[],int64_t beg,int64_t end)
 {
     if(end - beg <= 1)
@@ -340,7 +371,7 @@ void _QuickSort(int array[],int64_t beg,int64_t end)
     //[beg,mid)左半部分区间
     //[mid + 1,end)右半部分区间
     //左半区间中所有的元素一定都小于等于右半区间的所有元素
-    int64_t mid = Partion(array,beg,end);
+    int64_t mid = Partion2(array,beg,end);
     _QuickSort(array,beg,mid);
     _QuickSort(array,mid + 1,end);
 }
