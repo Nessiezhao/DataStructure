@@ -295,6 +295,55 @@ void MergeSortByLoop(int array[],size_t size)
     free(tmp);
 }
 //快速排序
+//1.交换法
+int64_t Partion(int array[],int64_t beg,int64_t end)
+{
+    if(end - beg <= 1)
+    {
+        return beg;
+    }
+    int64_t left = beg;
+    int64_t right = end - 1;
+    int key = array[end-1];
+    while(left < right)
+    {
+        while(left < right && array[left] <= key)
+        {
+            ++left;
+        }
+        while(left < right && array[right] >= key)
+        {
+            --right;
+        }
+        if(left < right )
+        {
+            Swap(&array[left],&array[right]);
+        }
+    }
+    Swap(&array[left],&array[end - 1]);
+    return left;
+}
+
+//2.挖坑法
+void _QuickSort(int array[],int64_t beg,int64_t end)
+{
+    if(end - beg <= 1)
+    {
+        //当前区间最多只有一个元素
+        return;
+    }
+    //[beg,mid)左半部分区间
+    //[mid + 1,end)右半部分区间
+    //左半区间中所有的元素一定都小于等于右半区间的所有元素
+    int64_t mid = Partion(array,beg,end);
+    _QuickSort(array,beg,mid);
+    _QuickSort(array,mid + 1,end);
+}
+void QuickSort(int array[],size_t size)
+{
+    //[0.size)
+    _QuickSort(array,0,size);
+}
 int main()
 {
     int array[] = {5,4,6,7,8,2,1,9};
@@ -345,7 +394,14 @@ int main()
     MergeSortByLoop(array6,sizeof(array6)/sizeof(array6[0]));
     for(i = 0;i < size;++i)
     {
-        printf("%d  ",array5[i]);
+        printf("%d  ",array6[i]);
+    }
+    printf("\n");
+    int array7[] = {5,4,6,7,8,2,1,9};
+    QuickSort(array7,sizeof(array7)/sizeof(array7[0]));
+    for(i = 0;i < size;++i)
+    {
+        printf("%d  ",array7[i]);
     }
     printf("\n");
     return 0;
