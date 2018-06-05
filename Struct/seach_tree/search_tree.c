@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include<stdlib.h>
 #include"search_tree.h"
+//常见的题
+//给定一个数组，再给你一个数字，让你判定数字是否在数组之中
+
 void SearchTreeInit(SearchNode** pRoot)
 {
     if(pRoot == NULL)
@@ -119,6 +122,7 @@ SearchNode* SearchTreeFind(SearchNode* root,SearchNodeType to_find)
     }
     return root;
 }
+
 //////////////////////////////////////////////////////////////////////
 //以下为测试代码
 //////////////////////////////////////////////////////////////////////
