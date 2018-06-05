@@ -101,6 +101,24 @@ void Inorder(SearchNode* root)
     printf("%c ",root->data);
     Inorder(root->rchild);
 }
+SearchNode* SearchTreeFind(SearchNode* root,SearchNodeType to_find)
+{
+    if(root == NULL)
+    {
+        return NULL;
+    }
+    if(to_find < root->data)
+    {
+        //递归的查找左子树
+        return SearchTreeFind(root->lchild,to_find);
+    }
+    if(to_find > root->data)
+    {
+        //递归的查找右子树
+        return SearchTreeFind(root->rchild,to_find);
+    }
+    return root;
+}
 //////////////////////////////////////////////////////////////////////
 //以下为测试代码
 //////////////////////////////////////////////////////////////////////
@@ -135,10 +153,24 @@ void TestInsert()
     SearchTreeInsert(&root,'b');
     SearchTreePrintChar(root,"插入5个元素");
 }
+void TestFind()
+{
+    TEST_HEADER;
+    SearchNode* root;
+    SearchTreeInit(&root);
+    SearchTreeInsert(&root,'a');
+    SearchTreeInsert(&root,'e');
+    SearchTreeInsert(&root,'c');
+    SearchTreeInsert(&root,'d');
+    SearchTreeInsert(&root,'b');
+    SearchNode* result = SearchTreeFind(root,'c');
+    printf("result expected c,actual %c\n",result->data);
+}
 int main()
 {
     TestInit();
     TestInsert();
+    TestFind();
     return 0;
 }
 #endif
