@@ -3,7 +3,7 @@
 #include"search_tree.h"
 //常见的题
 //给定一个数组，再给你一个数字，让你判定数字是否在数组之中
-
+//给定一个数组，数字可能存在重复元素，去重
 void SearchTreeInit(SearchNode** pRoot)
 {
     if(pRoot == NULL)
