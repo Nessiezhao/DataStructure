@@ -194,6 +194,51 @@ void SearchTreeRemove(SearchNode** pRoot,SearchNodeType to_remove)
     return;
 }
 //非递归版本
+void SearchTreeInsertByLoop(SearchNode** pRoot,SearchNodeType to_insert)
+{
+    if(pRoot == NULL)
+    {
+        return;
+    }
+    if(*pRoot == NULL)
+    {
+        *pRoot = CreateSearchNode(to_insert);
+        return;
+    }
+    SearchNode* cur = *pRoot;
+    SearchNode* pre = NULL;
+    while(1)
+    {
+        if(cur == NULL)
+        {
+            break;
+        }
+        if(to_insert < cur->data)
+        {
+            pre = cur;
+            cur = cur->lchild;
+        }
+        else if(to_insert > cur->data)
+        {
+            pre = cur;
+            cur = cur->rchild;
+        }
+        else
+        {
+            return;
+        }
+    }
+    SearchNode* new_node = CreateSearchNode(to_insert);
+    if(new_node->data < pre->data)
+    {
+        pre->lchild = new_node;
+    }
+    if(new_node->data > pre->data)
+    {
+        pre->rchild = new_node;
+    }
+    return;
+}
 SearchNode* SearchTreeFindByLoop(SearchNode* root,SearchNodeType to_find)
 {
     if(root == NULL)
@@ -279,6 +324,18 @@ void TestRemove()
     SearchTreeRemove(&root,'d');
     SearchTreePrintChar(root,"删除1个元素");
 }
+void TestInsertByLoop()
+{
+    TEST_HEADER;
+    SearchNode* root;
+    SearchTreeInit(&root);
+    SearchTreeInsertByLoop(&root,'a');
+    SearchTreeInsertByLoop(&root,'b');
+    SearchTreeInsertByLoop(&root,'c');
+    SearchTreeInsertByLoop(&root,'d');
+    SearchTreeInsertByLoop(&root,'e');
+    SearchTreePrintChar(root,"插入5个元素");
+}
 void TestFindByLoop()
 {
     TEST_HEADER;
@@ -298,6 +355,7 @@ int main()
     TestInsert();
     TestFind();
     TestRemove();
+    TestInsertByLoop();
     TestFindByLoop();
     return 0;
 }
