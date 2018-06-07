@@ -128,12 +128,16 @@ void SearchTreeRemove(SearchNode** pRoot,SearchNodeType to_remove)
 {
     if(pRoot == NULL)
     {
+        //非法输入
         return;
     }
     if(*pRoot == NULL)
     {
+        //空树
         return;
     }
+    //1.找到 to_remove 所在的位置
+    //如果没找到直接返回
     SearchNode* root = *pRoot;
     if(to_remove < root->data)
     {
@@ -147,36 +151,72 @@ void SearchTreeRemove(SearchNode** pRoot,SearchNodeType to_remove)
     }
     else
     {
+        //如果找到了，分情况讨论
         SearchNode* to_remove_node = root;
         if(root->lchild == NULL && root->rchild == NULL)
         {
+            //要删除节点没有子树
             *pRoot = NULL;
             DestroySearchNode(to_remove_node);
             return;
         }
         else if(root->lchild != NULL && root->rchild == NULL)
         {
+            //要删除节点只有左子树
             *pRoot = to_remove_node->lchild;
             DestroySearchNode(to_remove_node);
         }
         else if(root->lchild == NULL && root->rchild != NULL)
         {
+            //要删除节点只有右子树
             *pRoot = to_remove_node->rchild;
             DestroySearchNode(to_remove_node);
         }
         else
         {
+            //要删除节点有左右子树
+            //需要先找到右子树中的最小节点
+            //把要删除节点的值和最小节点的值进行交换
+            //从当前节点的右子树出发
+            //尝试递归的删除刚刚被交换的值
             SearchNode* min = to_remove_node->rchild;
             while(min->lchild != NULL)
             {
                 min = min->lchild;
             }
+            //min 已经指向了右子树中的最小节点
             to_remove_node->data = min->data;
+            //尝试递归删除min->data
             SearchTreeRemove(&to_remove_node->rchild,min->data);
             return;
         }
     }
     return;
+}
+//非递归版本
+SearchNode* SearchTreeFindByLoop(SearchNode* root,SearchNodeType to_find)
+{
+    if(root == NULL)
+    {
+        return NULL;
+    }
+    SearchNode* cur = root;
+    while(cur != NULL)
+    {
+        if(to_find > cur->data )
+        {
+            cur = cur->rchild;
+        }
+        if(to_find < cur->data)
+        {
+            cur = cur->lchild;
+        }
+        else
+        {
+            break;
+        }
+    }
+    return cur;
 }
 //////////////////////////////////////////////////////////////////////
 //以下为测试代码
@@ -239,12 +279,26 @@ void TestRemove()
     SearchTreeRemove(&root,'d');
     SearchTreePrintChar(root,"删除1个元素");
 }
+void TestFindByLoop()
+{
+    TEST_HEADER;
+    SearchNode* root;
+    SearchTreeInit(&root);
+    SearchTreeInsert(&root,'a');
+    SearchTreeInsert(&root,'e');
+    SearchTreeInsert(&root,'c');
+    SearchTreeInsert(&root,'d');
+    SearchTreeInsert(&root,'b');
+    SearchNode* result = SearchTreeFindByLoop(root,'c');
+    printf("result expected c,actual %c\n",result->data);
+}
 int main()
 {
     TestInit();
     TestInsert();
     TestFind();
     TestRemove();
+    TestFindByLoop();
     return 0;
 }
 #endif
