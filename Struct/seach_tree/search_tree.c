@@ -124,7 +124,60 @@ SearchNode* SearchTreeFind(SearchNode* root,SearchNodeType to_find)
     }
     return root;
 }
-
+void SearchTreeRemove(SearchNode** pRoot,SearchNodeType to_remove)
+{
+    if(pRoot == NULL)
+    {
+        return;
+    }
+    if(*pRoot == NULL)
+    {
+        return;
+    }
+    SearchNode* root = *pRoot;
+    if(to_remove < root->data)
+    {
+        SearchTreeRemove(&root->lchild,to_remove);
+        return;
+    }
+    else if(to_remove > root->data)
+    {
+        SearchTreeRemove(&root->rchild,to_remove);
+        return;
+    }
+    else
+    {
+        SearchNode* to_remove_node = root;
+        if(root->lchild == NULL && root->rchild == NULL)
+        {
+            *pRoot = NULL;
+            DestroySearchNode(to_remove_node);
+            return;
+        }
+        else if(root->lchild != NULL && root->rchild == NULL)
+        {
+            *pRoot = to_remove_node->lchild;
+            DestroySearchNode(to_remove_node);
+        }
+        else if(root->lchild == NULL && root->rchild != NULL)
+        {
+            *pRoot = to_remove_node->rchild;
+            DestroySearchNode(to_remove_node);
+        }
+        else
+        {
+            SearchNode* min = to_remove_node->rchild;
+            while(min->lchild != NULL)
+            {
+                min = min->lchild;
+            }
+            to_remove_node->data = min->data;
+            SearchTreeRemove(&to_remove_node->rchild,min->data);
+            return;
+        }
+    }
+    return;
+}
 //////////////////////////////////////////////////////////////////////
 //以下为测试代码
 //////////////////////////////////////////////////////////////////////
@@ -172,11 +225,26 @@ void TestFind()
     SearchNode* result = SearchTreeFind(root,'c');
     printf("result expected c,actual %c\n",result->data);
 }
+void TestRemove()
+{
+    TEST_HEADER;
+    SearchNode* root;
+    SearchTreeInit(&root);
+    SearchTreeInsert(&root,'a');
+    SearchTreeInsert(&root,'e');
+    SearchTreeInsert(&root,'c');
+    SearchTreeInsert(&root,'d');
+    SearchTreeInsert(&root,'b');
+    SearchTreePrintChar(root,"插入5个元素");
+    SearchTreeRemove(&root,'d');
+    SearchTreePrintChar(root,"删除1个元素");
+}
 int main()
 {
     TestInit();
     TestInsert();
     TestFind();
+    TestRemove();
     return 0;
 }
 #endif
