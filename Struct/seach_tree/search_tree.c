@@ -263,6 +263,17 @@ SearchNode* SearchTreeFindByLoop(SearchNode* root,SearchNodeType to_find)
     }
     return cur;
 }
+void SearchTreeRemoveByLoop(SearchNode** pRoot,SearchNodeType to_remove)
+{
+    if(pRoot == NULL)
+    {
+        return;
+    }
+    if(*pRoot == NULL)
+    {
+        return;
+    }
+}
 //////////////////////////////////////////////////////////////////////
 //以下为测试代码
 //////////////////////////////////////////////////////////////////////
