@@ -296,6 +296,24 @@ void SearchTreeRemoveByLoop(SearchNode** pRoot,SearchNodeType to_remove)
             break;
         }
     }
+    if(to_remove_node->lchild == NULL && to_remove_node->rchild == NULL)
+    {
+        if(to_remove_node == *pRoot)
+        {
+            *pRoot = NULL;
+        }
+        else
+        {
+            if(to_remove_node->data < parent->data)
+            {
+                parent->lchild = NULL;
+            }
+            else
+            {
+                parent->rchild = NULL;
+            }
+        }
+    }
 }
 //////////////////////////////////////////////////////////////////////
 //以下为测试代码
