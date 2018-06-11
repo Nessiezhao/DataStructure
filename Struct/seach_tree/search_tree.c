@@ -273,12 +273,14 @@ void SearchTreeRemoveByLoop(SearchNode** pRoot,SearchNodeType to_remove)
     {
         return;
     }
+    //先找要删除的节点是谁
     SearchNode* to_remove_node = *pRoot;
     SearchNode* parent = NULL;
     while(1)
     {
         if(to_remove_node == NULL)
         {
+            //没找到要删除的节点，函数直接终止
             return;
         }
         if(to_remove < to_remove_node->data)
@@ -293,17 +295,24 @@ void SearchTreeRemoveByLoop(SearchNode** pRoot,SearchNodeType to_remove)
         }
         else
         {
+            //找到了要删除的节点
             break;
         }
     }
+    //如果找到了要删除的节点，分情况讨论
     if(to_remove_node->lchild == NULL && to_remove_node->rchild == NULL)
     {
+        //没有子树
+        //此处我们要先判断要删除的节点是否是根结点
         if(to_remove_node == *pRoot)
         {
+            //要删除的节点是根结点， parent == NULL
             *pRoot = NULL;
         }
         else
         {
+            //要删除元素不是根结点
+            //需要知道当前节点是parent的左子树还是右子树
             if(to_remove_node->data < parent->data)
             {
                 parent->lchild = NULL;
@@ -313,10 +322,12 @@ void SearchTreeRemoveByLoop(SearchNode** pRoot,SearchNodeType to_remove)
                 parent->rchild = NULL;
             }
         }
+        //统一释放节点内存
         DestroySearchNode(to_remove_node);
     }
     else if(to_remove_node->lchild != NULL && to_remove_node->rchild == NULL)
     {
+        //只有左子树
         if(to_remove_node == *pRoot)
         {
             *pRoot = to_remove_node->lchild;
@@ -337,6 +348,7 @@ void SearchTreeRemoveByLoop(SearchNode** pRoot,SearchNodeType to_remove)
     }
     else if(to_remove_node->lchild == NULL && to_remove_node->rchild != NULL)
     {
+        //只有右子树
         if(to_remove_node == *pRoot)
         {
             *pRoot = to_remove_node->rchild;
@@ -357,8 +369,32 @@ void SearchTreeRemoveByLoop(SearchNode** pRoot,SearchNodeType to_remove)
     }
     else
     {
-
+        //同时有左右子树
+        SearchNode* min = to_remove_node->rchild;
+        SearchNode* min_parent = to_remove_node;
+        while(min->lchild != NULL)
+        {
+            min_parent = min;
+            min = min->lchild;
+        }
+        //循环结束后，min就指向了to_remove_node右子树的最小值
+        to_remove_node->data = min->data;
+        if(min->data < min_parent->data)
+        {
+            //min是min_parent 的左子树
+            //min一定没有左子树
+            min_parent->lchild = min->rchild;
+        }
+        else
+        {
+            //通常情况下，min 是 min_parent 左子树
+            //但是出世情况下例外
+            min_parent->rchild = min->rchild;
+        }
+        DestroySearchNode(min);
+        return;
     }
+    return;
 }
 //////////////////////////////////////////////////////////////////////
 //以下为测试代码
@@ -446,6 +482,20 @@ void TestFindByLoop()
     SearchNode* result = SearchTreeFindByLoop(root,'c');
     printf("result expected c,actual %c\n",result->data);
 }
+void TestRemoveByLoop()
+{
+    TEST_HEADER;
+    SearchNode* root;
+    SearchTreeInit(&root);
+    SearchTreeInsert(&root,'a');
+    SearchTreeInsert(&root,'e');
+    SearchTreeInsert(&root,'c');
+    SearchTreeInsert(&root,'d');
+    SearchTreeInsert(&root,'b');
+    SearchTreePrintChar(root,"插入5个元素");
+    SearchTreeRemoveByLoop(&root,'d');
+    SearchTreePrintChar(root,"删除1个元素");
+}
 int main()
 {
     TestInit();
@@ -454,6 +504,7 @@ int main()
     TestRemove();
     TestInsertByLoop();
     TestFindByLoop();
+    TestRemoveByLoop();
     return 0;
 }
 #endif
